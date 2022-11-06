@@ -43,8 +43,8 @@ class Citations(commands.Cog):
 
 		return content
 
-	@commands.command(aliases=["CSetup"])
-	async def CitationsSetup(self, ctx):
+	@commands.hybrid_command(name="citation-setup", aliases=["CSetup"])
+	async def CitationsSetup(self, ctx: commands.Context):
 		"""
 		Setup a citation collection for the server
 		"""
@@ -78,8 +78,8 @@ class Citations(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["CAdd", "CitationAdd"])
-	async def AddCitation(self, ctx, quote, author, date = ""):
+	@commands.hybrid_command(name="citation-add", aliases=["CAdd", "CitationAdd"])
+	async def AddCitation(self, ctx: commands.Context, quote: str, author: str, date: str = ""):
 		"""
 		Add a citation
 		"""
@@ -105,8 +105,8 @@ class Citations(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["Citation", "C"])
-	async def getCitation(self, ctx, author = ""):
+	@commands.hybrid_command(name="citation", aliases=["Citation", "C"])
+	async def getCitation(self, ctx: commands.Context, author: str = ""):
 		"""
 		Get a random citation
 		"""
@@ -144,8 +144,8 @@ class Citations(commands.Cog):
 		else:
 			await ctx.send(embed=msg)
 
-	@commands.command(aliases=["CStats", "CStat", "CitationStats"])
-	async def getCitationStats(self, ctx):
+	@commands.hybrid_command(name="citation-stat", aliases=["CStats", "CStat", "CitationStats"])
+	async def getCitationStats(self, ctx: commands.Context):
 		"""
 		Get the usage stat of this server
 		"""

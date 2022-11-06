@@ -48,8 +48,8 @@ class RandomPicker(commands.Cog):
 			f.close()
 		return exist
 
-	@commands.command(aliases=["RPSetup"])
-	async def RandomPickerSetup(self, ctx):
+	@commands.hybrid_command(name="random-picker-setup", aliases=["RPSetup"])
+	async def RandomPickerSetup(self, ctx: commands.Context):
 		"""
 		Setup a RandomPicker collection for the server
 		"""
@@ -79,8 +79,11 @@ class RandomPicker(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["RPList", "RPL"])
-	async def RandomPickerList(self, ctx):
+	@commands.hybrid_command(name="random-picker-list", aliases=["RPList", "RPL"])
+	async def RandomPickerList(self, ctx: commands.Context):
+		"""
+			List choice
+		"""
 		msg = "Unkown Error"
 		exist = self.checkIfExist(str(ctx.message.guild.id))
 
@@ -115,8 +118,8 @@ class RandomPicker(commands.Cog):
 		else:
 			await ctx.send(embed=msg)
 
-	@commands.command(aliases=["RPAdd", "RPA"])
-	async def RandomPickerAdd(self, ctx, choice, weight):
+	@commands.hybrid_command(name="random-picker-add", aliases=["RPAdd", "RPA"])
+	async def RandomPickerAdd(self, ctx: commands.Context, choice: str, weight: int):
 		"""
 		Add a choice
 		"""
@@ -159,8 +162,8 @@ class RandomPicker(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["RPChange", "RPC"])
-	async def RandomPickerChangeWeight(self, ctx, choice, newWeight):
+	@commands.hybrid_command(name="random-picker-change-weight", aliases=["RPChange", "RPC"])
+	async def RandomPickerChangeWeight(self, ctx: commands.Context, choice: str, new_weight: int):
 		"""
 		Change a weight of a choice
 		"""
@@ -170,7 +173,7 @@ class RandomPicker(commands.Cog):
 		if(exist):
 
 			# We check if the weight is a valid number
-			if(isinstance(newWeight, int)):
+			if(isinstance(new_weight, int)):
 				data = self.getInfos(str(ctx.message.guild.id))
 
 				author = str(ctx.author.id)
@@ -182,7 +185,7 @@ class RandomPicker(commands.Cog):
 						if(choice == existingChoice['name']):
 							exist = True
 							# We change the value
-							existingChoice['weight'] = int(newWeight)%11
+							existingChoice['weight'] = int(new_weight)%11
 
 					if(not exist):
 						msg = "This choice doesn't exist"
@@ -201,8 +204,8 @@ class RandomPicker(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["RP"])
-	async def RandomPicker(self, ctx):
+	@commands.hybrid_command(name="random-picker", aliases=["RP"])
+	async def RandomPicker(self, ctx: commands.Context):
 		"""
 		Choose a random option
 		"""
@@ -295,8 +298,8 @@ class RandomPicker(commands.Cog):
 		else:
 			await ctx.send(embed=msg)
 
-	@commands.command(aliases=["RPDelete", "RPD"])
-	async def RandomPickerDelete(self, ctx, choice):
+	@commands.hybrid_command(name="random-picker-delete", aliases=["RPDelete", "RPD"])
+	async def RandomPickerDelete(self, ctx: commands.Context, choice: str):
 		"""
 		Delete a choice
 		"""

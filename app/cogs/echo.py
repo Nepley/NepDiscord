@@ -39,8 +39,8 @@ class Echo(commands.Cog):
 
 		return content
 
-	@commands.command(aliases=["ESetup"])
-	async def EchoSetup(self, ctx):
+	@commands.hybrid_command(name="echo-setup", aliases=["ESetup"])
+	async def EchoSetup(self, ctx: commands.Context):
 		"""
 		Setup a echo collection for the server
 		"""
@@ -74,8 +74,8 @@ class Echo(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["EAdd", "EchoAdd"])
-	async def AddEcho(self, ctx, tag, echo):
+	@commands.hybrid_command(name="echo-add", aliases=["EAdd", "EchoAdd"])
+	async def AddEcho(self, ctx: commands.Context, tag: str, echo: str):
 		"""
 		Add an echo
 		"""
@@ -101,8 +101,8 @@ class Echo(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["Echo", "E"])
-	async def getEcho(self, ctx, tag):
+	@commands.hybrid_command(name="echo", aliases=["Echo", "E"])
+	async def getEcho(self, ctx: commands.Context, tag: str):
 		"""
 		Retrieve an echo
 		"""
@@ -132,8 +132,8 @@ class Echo(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["ETag", "Etags", "EchoTag", "EchoTags", "ListTag", "ListTags"])
-	async def getListTagEcho(self, ctx):
+	@commands.hybrid_command(name="echo-list-tags", aliases=["ETag", "Etags", "EchoTag", "EchoTags", "ListTag", "ListTags"])
+	async def getListTagEcho(self, ctx: commands.Context):
 		"""
 		Get a list of the existing tag for this server
 		"""

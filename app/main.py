@@ -51,6 +51,9 @@ async def on_ready():
 	await bot.load_extension('cogs.playlist')
 	await bot.load_extension('cogs.randomPicker')
 
+	# We sync the application command
+	await bot.tree.sync()
+
 	print("Main API called. All Cogs loaded. Discord Bot started.")
 
 @bot.event
@@ -71,9 +74,10 @@ async def on_message(message):
 
 	await bot.process_commands(message)
 
-@bot.command()
-async def Nep(ctx):
-	await ctx.reply('Nep!')
+@bot.hybrid_command(name="nep", aliases=["Nep"])
+async def Nep(ctx: commands.Context):
+	"""Say Nep"""
+	await ctx.send('Nep!')
 
 #WS checking anniversaries
 @app.get("/")

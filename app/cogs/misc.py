@@ -13,8 +13,8 @@ class Misc(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
-    async def Dice(self, ctx, dices, faces, minValue = 1):
+    @commands.hybrid_command(name="dice")
+    async def Dice(self, ctx: commands.Context, dices: int, faces: int):
         """
         Roll a dice
         """
@@ -29,8 +29,8 @@ class Misc(commands.Cog):
             dice = result.json()
             await ctx.reply(dice)
 
-    @commands.command()
-    async def Booru(self, ctx, tag1, tag2 = ""):
+    @commands.hybrid_command(name="booru")
+    async def Booru(self, ctx: commands.Context, tag1: str, tag2: str = ""):
         """
         Retrieve a random image from SafeBooru
         """
@@ -44,8 +44,11 @@ class Misc(commands.Cog):
             url = result.json()["url"]
             await ctx.send(url)
         
-    @commands.command(aliases=["help"])
-    async def Help(self, ctx):
+    @commands.hybrid_command(name="help-message", aliases=["help"])
+    async def Help(self, ctx: commands.Context):
+        """
+            Help Message
+        """
         # Citations
         quote_header = "Citations"
         quote_content = "**CSetup**: Setup a citation collection for the server\n"

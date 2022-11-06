@@ -48,8 +48,8 @@ class Playlist(commands.Cog):
 			f.close()
 		return exist
 
-	@commands.command(aliases=["PSetup"])
-	async def PlaylistSetup(self, ctx):
+	@commands.hybrid_command(name="playlist-setup", aliases=["PSetup"])
+	async def PlaylistSetup(self, ctx: commands.Context):
 		"""
 		Setup an playlist collection for the server
 		"""
@@ -81,8 +81,8 @@ class Playlist(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["PList", "PlaylistList"])
-	async def getListPlaylists(self, ctx):
+	@commands.hybrid_command(name="playlist-list", aliases=["PList", "PlaylistList"])
+	async def getListPlaylists(self, ctx: commands.Context):
 		"""
 		Get a list of the playlists for this server
 		"""
@@ -113,8 +113,8 @@ class Playlist(commands.Cog):
 		else:
 			await ctx.send(embed=msg)
 
-	@commands.command(aliases=["PAdd", "PlaylistAdd"])
-	async def AddPlaylist(self, ctx, name, url):
+	@commands.hybrid_command(name="playlsit-add", aliases=["PAdd", "PlaylistAdd"])
+	async def AddPlaylist(self, ctx: commands.Context, name: str, url: str):
 		"""
 		Add a playlist
 		"""
@@ -161,8 +161,8 @@ class Playlist(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["PSetC", "PSetChannel"])
-	async def PlaylistSetChannel(self, ctx):
+	@commands.hybrid_command(name="playlist-set-channel", aliases=["PSetC", "PSetChannel"])
+	async def PlaylistSetChannel(self, ctx: commands.Context):
 		"""
 		Set the channel where the playlist will be notified
 		"""
@@ -184,8 +184,8 @@ class Playlist(commands.Cog):
 
 		await ctx.send(msg)
 	
-	@commands.command(aliases=["PDelete", "PlaylistDelete"])
-	async def deletePlaylist(self, ctx, name):
+	@commands.hybrid_command(name="playlist-delete", aliases=["PDelete", "PlaylistDelete"])
+	async def deletePlaylist(self, ctx: commands.Context, name: str):
 		"""
 		Delete a playlist
 		"""

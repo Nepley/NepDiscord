@@ -49,8 +49,8 @@ class Anniversary(commands.Cog):
 			json.dump(data, f)
 			f.close()
 
-	@commands.command(aliases=["ASetup"])
-	async def AnniversarySetup(self, ctx):
+	@commands.hybrid_command(name="anniversary-setup", aliases=["ASetup"])
+	async def AnniversarySetup(self, ctx: commands.Context):
 		"""
 		Setup an anniversary collection for the server
 		"""
@@ -90,8 +90,8 @@ class Anniversary(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["AAdd", "AnniversaryAdd"])
-	async def AddAnniversary(self, ctx, name, day, month, tag_1 = "", tag_2 = ""):
+	@commands.hybrid_command(name="anniversary-add", aliases=["AAdd", "AnniversaryAdd"])
+	async def AddAnniversary(self, ctx: commands.Context, name: str, day: int, month: int, tag_1: str = "", tag_2: str = ""):
 		"""
 		Add an anniversary
 		"""
@@ -117,8 +117,8 @@ class Anniversary(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["AList", "AnniversaryList"])
-	async def getListAnniversaries(self, ctx):
+	@commands.hybrid_command(name="anniversary-list", aliases=["AList", "AnniversaryList"])
+	async def getListAnniversaries(self, ctx: commands.Context):
 		"""
 		Get a list of the anniversaries for this server
 		"""
@@ -160,8 +160,8 @@ class Anniversary(commands.Cog):
 		else:
 			await ctx.send(embed=msg)
 
-	@commands.command(aliases=["ASetS", "ASetSentence"])
-	async def AnniversarySetSentence(self, ctx, sentence):
+	@commands.hybrid_command(name="anniversary-set-sentence", aliases=["ASetS", "ASetSentence"])
+	async def AnniversarySetSentence(self, ctx: commands.Context, sentence: str):
 		"""
 		Set the start of the sentence say for an anniversary
 		"""
@@ -183,8 +183,8 @@ class Anniversary(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["ASetC", "ASetChannel"])
-	async def AnniversarySetChannel(self, ctx):
+	@commands.hybrid_command(name="anniversary-set-channel", aliases=["ASetC", "ASetChannel"])
+	async def AnniversarySetChannel(self, ctx: commands.Context):
 		"""
 		Set the channel where the anniversaries will be notified
 		"""
