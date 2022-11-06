@@ -93,7 +93,7 @@ class Echo(commands.Cog):
 				print("Error while contacting the main API")
 
 			if(result):
-				msg = "Echo added"
+				msg = f"Echo {tag} added"
 			else:
 				msg = "Error while adding the quote"
 		else:

@@ -97,7 +97,7 @@ class Citations(commands.Cog):
 				print("Error while contacting the main API")
 
 			if(result):
-				msg = "Citations added"
+				msg = f"Citations '{quote}' from {author} added"
 			else:
 				msg = "Error while adding the quote"
 		else:

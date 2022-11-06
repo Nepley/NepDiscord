@@ -152,7 +152,7 @@ class RandomPicker(commands.Cog):
 					# We save the modification
 					self.saveData(str(ctx.message.guild.id), data)
 
-					msg = "Choice added"
+					msg = f"Choice {choice} ({weight}) added"
 				else:
 					msg = "This choice already exist"
 			else:

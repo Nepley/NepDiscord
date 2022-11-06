@@ -109,7 +109,7 @@ class Anniversary(commands.Cog):
 				print("Error while contacting the main API")
 
 			if(result):
-				msg = "Anniversary added"
+				msg = f"Anniversary of {name} ({day}/{month}) added"
 			else:
 				msg = "Error while adding the anniversary"
 		else:
