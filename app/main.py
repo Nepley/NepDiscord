@@ -11,7 +11,10 @@ f = open("config.json", "r")
 config = json.load(f)
 f.close()
 
-bot = commands.Bot(command_prefix='Nep', help_command=None)
+intents = nextcord.Intents.default()  # Allow the use of custom intents
+intents.members = True
+
+bot = commands.Bot(command_prefix='Dev', help_command=None, intents=intents)
 token = config["token"]
 
 # Server in order to make Webservice
@@ -45,7 +48,7 @@ async def on_ready():
 	bot.load_extension('cogs.anniversary')
 	bot.load_extension('cogs.misc')
 	bot.load_extension('cogs.playlist')
-	# bot.load_extension('cogs.randompicker')
+	bot.load_extension('cogs.randomPicker')
 
 	print("Main API called. All Cogs loaded. Discord Bot started.")
 

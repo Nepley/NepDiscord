@@ -1,9 +1,8 @@
 import os
 import json
+import random
 from nextcord.ext import commands
 import nextcord
-import requests
-import hashlib
 
 randomPicker_file = "randomPicker.json"
 
@@ -37,7 +36,7 @@ class RandomPicker(commands.Cog):
 			f.close()
 
 		return content
-	
+
 	def saveData(self, id_guild, data):
 		"""
 		Function to save new data to the randomPicker file
@@ -65,7 +64,6 @@ class RandomPicker(commands.Cog):
 
 			# We set the default data
 			data = {}
-			data['users'] = []
 
 			# We store them in a json file
 			f = open("guilds/"+str(ctx.message.guild.id)+"/"+randomPicker_file, "w")
@@ -81,7 +79,7 @@ class RandomPicker(commands.Cog):
 
 		await ctx.send(msg)
 
-	@commands.command(aliases=["RPList"])
+	@commands.command(aliases=["RPList", "RPL"])
 	async def RandomPickerList(self, ctx):
 		msg = "Unkown Error"
 		exist = self.checkIfExist(str(ctx.message.guild.id))
@@ -90,9 +88,11 @@ class RandomPicker(commands.Cog):
 			data = self.getInfos(str(ctx.message.guild.id))
 
 			listChoice = []
+			author = str(ctx.author.id)
+
 			# If the user already have use this system
-			if(ctx.user.id in data):
-				listChoice = data[ctx.user.id]
+			if(author in data):
+				listChoice = data[author]
 
 			# We format the message
 			msg_header = "List Choice"
@@ -115,8 +115,8 @@ class RandomPicker(commands.Cog):
 		else:
 			await ctx.send(embed=msg)
 
-	@commands.command(aliases=["RPAdd"])
-	async def RandomPickerAdd(self, ctx, choice, weight = 5):
+	@commands.command(aliases=["RPAdd", "RPA"])
+	async def RandomPickerAdd(self, ctx, choice, weight):
 		"""
 		Add a choice
 		"""
@@ -124,17 +124,214 @@ class RandomPicker(commands.Cog):
 		exist = self.checkIfExist(str(ctx.message.guild.id))
 
 		if(exist):
-			data = self.getInfos(str(ctx.message.guild.id))
 
-			# If the user does not already have use this system, we add him
-			if(not ctx.user.id in data):
-				data[ctx.user.id] = []
+			# We check if the weight is a valid number
+			if(isinstance(weight, int)):
+				data = self.getInfos(str(ctx.message.guild.id))
 
-			# We add the choice linked to the user
-			data[ctx.user.id].append({"name": choice, "weight": weight%11})
+				author = str(ctx.author.id)
 
-			msg = "Choice added"
+				# If the user does not already have use this system, we add him
+				if(not author in data):
+					data[author] = []
+
+				# We check if it already exist
+				newChoice = True
+				for existingChoice in data[author]:
+					if(choice == existingChoice['name']):
+						newChoice = False
+						break
+
+				if(newChoice):
+					# We add the choice linked to the user
+					data[author].append({"name": choice, "weight": weight%11})
+
+					# We save the modification
+					self.saveData(str(ctx.message.guild.id), data)
+
+					msg = "Choice added"
+				else:
+					msg = "This choice already exist"
+			else:
+				msg = "Weight is not a valid number"
 		else:
 			msg = "This server is not ready to manage RandomPicker"
-		
-		return ctx.send(msg)
+
+		await ctx.send(msg)
+
+	@commands.command(aliases=["RPChange", "RPC"])
+	async def RandomPickerChangeWeight(self, ctx, choice, newWeight):
+		"""
+		Change a weight of a choice
+		"""
+		msg = "Unkown Error"
+		exist = self.checkIfExist(str(ctx.message.guild.id))
+
+		if(exist):
+
+			# We check if the weight is a valid number
+			if(isinstance(newWeight, int)):
+				data = self.getInfos(str(ctx.message.guild.id))
+
+				author = str(ctx.author.id)
+				# If the user does not already have use this system, or have no choice
+				if(author in data or data[author] != []):
+					# We check if the choice exist
+					exist = False
+					for existingChoice in data[author]:
+						if(choice == existingChoice['name']):
+							exist = True
+							# We change the value
+							existingChoice['weight'] = int(newWeight)%11
+
+					if(not exist):
+						msg = "This choice doesn't exist"
+					else:
+						# We save the modification
+						self.saveData(str(ctx.message.guild.id), data)
+
+						msg = "Weight changed"
+
+				else:
+					msg = "You don't have any choice"
+			else:
+				msg = "New weight is not a valid number"
+		else:
+			msg = "This server is not ready to manage RandomPicker"
+
+		await ctx.send(msg)
+
+	@commands.command(aliases=["RP"])
+	async def RandomPicker(self, ctx):
+		"""
+		Choose a random option
+		"""
+		msg = "Unkown Error"
+		errorMessage = True
+		exist = self.checkIfExist(str(ctx.message.guild.id))
+		if(exist):
+			data = self.getInfos(str(ctx.message.guild.id))
+
+			author = str(ctx.author.id)
+
+			# We retrieve the user vocal channel
+			voice = ctx.message.author.voice
+			voice_client = ctx.guild.get_channel(ctx.message.author.voice.channel.id)
+
+			listChoice = []
+			if voice:
+				# We retrieve the choice of the other users
+				listMember = voice.channel.members
+
+				listAllChoice = []
+
+				# We have a list that are all the item where a member has a zero and therefor, doesn't want it
+				ZeroList = []
+				for member in listMember:
+					# If the user already have use this system
+					if(str(member.id) in data):
+						listAllChoice.append(data[str(member.id)])
+
+				# We regroup all the choice into one lise
+				for choiceList in listAllChoice:
+					for choice in choiceList:
+						# We check if it already exist
+						exist = False
+						for existingChoice in listChoice:
+							if(choice['name'] == existingChoice['name']):
+								exist = True
+								# We add the weight if it's not zero, else we remove and ban it
+								if(choice['weight'] != 0):
+									existingChoice['weight'] += choice['weight']
+								else:
+									ZeroList.append(existingChoice['name'])
+									listChoice.remove(existingChoice)
+								break
+
+						# If it was not found, we try to add it
+						if(not exist):
+							# If it's not zero, we add it, else we ban it
+							if(choice['weight'] != 0 and choice['name'] not in ZeroList):
+								listChoice.append(choice)
+							else:
+								ZeroList.append(choice['name'])
+			else:
+				# We retrieve the choice of the author
+				listChoice = data[str(ctx.author.id)]
+
+				# We remove each choice with a zero weight
+				for choice in listChoice:
+					if(choice['weight'] == 0):
+						listChoice.remove(choice)
+
+			if(listChoice != []):
+				# We split the name and weight into two list
+				listName = []
+				listWeight = []
+
+				for choice in listChoice:
+					listName.append(choice['name'])
+					listWeight.append(choice['weight'])
+
+				#We choose randomly
+				itemChoose = random.choices(listName, listWeight)
+
+				# We format the message
+				msg_header = "Item Choose"
+
+				embed = nextcord.Embed(color=nextcord.Color.blurple())
+				embed.title = msg_header
+				embed.description = itemChoose[0]
+
+				msg = embed
+				errorMessage = False
+			else:
+				msg = "No choice possible"
+		else:
+			msg = "This server is not ready to manage RandomPicker"
+
+		if(errorMessage):
+			await ctx.send(msg)
+		else:
+			await ctx.send(embed=msg)
+
+	@commands.command(aliases=["RPDelete", "RPD"])
+	async def RandomPickerDelete(self, ctx, choice):
+		"""
+		Delete a choice
+		"""
+		msg = "Unkown Error"
+		exist = self.checkIfExist(str(ctx.message.guild.id))
+
+		if(exist):
+			data = self.getInfos(str(ctx.message.guild.id))
+
+			author = str(ctx.author.id)
+
+			# If the user does not already have use this system
+			if(author in data):
+				found = False
+				# We search the choice to delete
+				for existingChoice in data[author]:
+					if(choice == existingChoice['name']):
+						found = True
+						data[author].remove(existingChoice)
+						break
+
+				if(found):
+					# We save the modification
+					self.saveData(str(ctx.message.guild.id), data)
+
+					msg = "Choice deleted"
+				else:
+					msg = "Choice doesn't exist"
+
+			else:
+				msg = "you don't have any choice"
+		else:
+			msg = "This server is not ready to manage RandomPicker"
+
+		await ctx.send(msg)
+
+def setup(bot):
+	bot.add_cog(RandomPicker(bot))

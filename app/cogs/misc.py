@@ -92,6 +92,19 @@ class Misc(commands.Cog):
         playlist_help.title = playlist_header
         playlist_help.description = playlist_content
 
+        # Random Picker
+        random_picker_header = "Random Picker"
+        random_picker_content = "**RPSetup**: Setup the random picker for the server\n"
+        random_picker_content += "**RPAdd / RPA [choice] [weight]**: Add a choice with a weight between 0 and 10\n"
+        random_picker_content += "**RPList / RPL**: Get a list of the choice\n"
+        random_picker_content += "**RPDelete / RPD [choice]**: Delete a choice\n"
+        random_picker_content += "**RPChange / RPC [choice] [newWeight]**: Change the weight of a choice\n"
+        random_picker_content += "**RP**: Choose a random item from your list of choice, if your in a vocal channel with other people, merge the list choice of the other member\n"
+
+        random_picker_help = nextcord.Embed(color=nextcord.Color.yellow())
+        random_picker_help.title = random_picker_header
+        random_picker_help.description = random_picker_content
+
         # Misc
         misc_header = "Miscellaneous"
         misc_content = "**Dice [nbDice] [nbFace] [~minValue]**: Roll a dice\n"
@@ -107,6 +120,7 @@ class Misc(commands.Cog):
         await ctx.send(embed=echo_help)
         await ctx.send(embed=anniv_help)
         await ctx.send(embed=playlist_help)
+        await ctx.send(embed=random_picker_help)
         await ctx.send(embed=misc_help)
 
     # Error Handling
