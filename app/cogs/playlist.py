@@ -1,7 +1,7 @@
 import os
 import json
-from nextcord.ext import commands
-import nextcord
+from discord.ext import commands
+import discord
 from pytube import Playlist as pytubePlaylist
 
 playlist_file = "playlist.json"
@@ -99,7 +99,7 @@ class Playlist(commands.Cog):
 			for playlist in data['playlists']:
 				msg_content += f"[{playlist['name']}]({playlist['url']})\n"
 
-			embed = nextcord.Embed(color=nextcord.Color.blurple())
+			embed = discord.Embed(color=discord.Color.blurple())
 			embed.title = msg_header
 			embed.description = msg_content
 
@@ -218,5 +218,5 @@ class Playlist(commands.Cog):
 		
 		await ctx.send(msg)
 
-def setup(bot):
-	bot.add_cog(Playlist(bot))
+async def setup(bot):
+	await bot.add_cog(Playlist(bot))

@@ -1,7 +1,7 @@
 import os
 import json
-from nextcord.ext import commands
-import nextcord
+from discord.ext import commands
+import discord
 import requests
 
 anniversary_file = "anniversary.json"
@@ -144,7 +144,7 @@ class Anniversary(commands.Cog):
 				for anniversary in anniversaries:
 					msg_content += anniversary["name"]+": **"+str(anniversary["day"])+"/"+str(anniversary["month"])+"**\n"
 
-				embed = nextcord.Embed(color=nextcord.Color.blurple())
+				embed = discord.Embed(color=discord.Color.blurple())
 				embed.title = msg_header
 				embed.description = msg_content
 
@@ -215,5 +215,5 @@ class Anniversary(commands.Cog):
 		else:
 			print(error)
 
-def setup(bot):
-	bot.add_cog(Anniversary(bot))
+async def setup(bot):
+	await bot.add_cog(Anniversary(bot))

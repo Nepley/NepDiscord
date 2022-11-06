@@ -1,6 +1,6 @@
 import requests
-from nextcord.ext import commands
-import nextcord
+from discord.ext import commands
+import discord
 import json
 
 f = open("config.json", "r")
@@ -53,7 +53,7 @@ class Misc(commands.Cog):
         quote_content += "**C / Citation [~author]**: Get a random citation\n"
         quote_content += "**CStats / CitationStats**: Get the usage stat of this server\n"
 
-        quote_help = nextcord.Embed(color=nextcord.Color.blue())
+        quote_help = discord.Embed(color=discord.Color.blue())
         quote_help.title = quote_header
         quote_help.description = quote_content
 
@@ -64,7 +64,7 @@ class Misc(commands.Cog):
         echo_content += "**E / Echo [tag]**: Retrieve an echo\n"
         echo_content += "**ETags / ListTags**: Get a list of the existing tag for this server\n"
 
-        echo_help = nextcord.Embed(color=nextcord.Color.red())
+        echo_help = discord.Embed(color=discord.Color.red())
         echo_help.title = echo_header
         echo_help.description = echo_content
 
@@ -76,7 +76,7 @@ class Misc(commands.Cog):
         anniv_content += "**ASetChannel**: Set the channel where the anniversaries will be notified\n"
         anniv_content += "**ASetSentence [sentence]**: Set the start of the sentence\n"
 
-        anniv_help = nextcord.Embed(color=nextcord.Color.green())
+        anniv_help = discord.Embed(color=discord.Color.green())
         anniv_help.title = anniv_header
         anniv_help.description = anniv_content
 
@@ -88,7 +88,7 @@ class Misc(commands.Cog):
         playlist_content += "**PSetChannel**: Set the channel where the playlist change will be notified\n"
         playlist_content += "**PDelete [name]**: Delete a playlist\n"
 
-        playlist_help = nextcord.Embed(color=nextcord.Color.orange())
+        playlist_help = discord.Embed(color=discord.Color.orange())
         playlist_help.title = playlist_header
         playlist_help.description = playlist_content
 
@@ -101,7 +101,7 @@ class Misc(commands.Cog):
         random_picker_content += "**RPChange / RPC [choice] [newWeight]**: Change the weight of a choice\n"
         random_picker_content += "**RP**: Choose a random item from your list of choice, if your in a vocal channel with other people, merge the list choice of the other member\n"
 
-        random_picker_help = nextcord.Embed(color=nextcord.Color.yellow())
+        random_picker_help = discord.Embed(color=discord.Color.yellow())
         random_picker_help.title = random_picker_header
         random_picker_help.description = random_picker_content
 
@@ -111,7 +111,7 @@ class Misc(commands.Cog):
         misc_content += "**Booru [tag_1] [~tag_2]**: Retrieve a random image from SafeBooru\n"
         misc_content += "**Help**: Get this message\n"
 
-        misc_help = nextcord.Embed(color=nextcord.Color.blurple())
+        misc_help = discord.Embed(color=discord.Color.blurple())
         misc_help.title = misc_header
         misc_help.description = misc_content
 
@@ -131,5 +131,5 @@ class Misc(commands.Cog):
         if isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("At least one argument is missing")
 
-def setup(bot):
-    bot.add_cog(Misc(bot))
+async def setup(bot):
+    await bot.add_cog(Misc(bot))

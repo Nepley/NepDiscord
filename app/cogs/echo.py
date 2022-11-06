@@ -1,7 +1,7 @@
 import os
 import json
-from nextcord.ext import commands
-import nextcord
+from discord.ext import commands
+import discord
 import requests
 
 echo_file = "echo.json"
@@ -159,7 +159,7 @@ class Echo(commands.Cog):
 				for tag in tags:
 					msg_content += tag["tag"]+"\n"
 
-				embed = nextcord.Embed(color=nextcord.Color.blurple())
+				embed = discord.Embed(color=discord.Color.blurple())
 				embed.title = msg_header
 				embed.description = msg_content
 
@@ -185,5 +185,5 @@ class Echo(commands.Cog):
 		else:
 			print(error)
 
-def setup(bot):
-	bot.add_cog(Echo(bot))
+async def setup(bot):
+	await bot.add_cog(Echo(bot))

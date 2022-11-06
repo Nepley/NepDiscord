@@ -1,8 +1,8 @@
 import os
 import json
 import random
-from nextcord.ext import commands
-import nextcord
+from discord.ext import commands
+import discord
 
 randomPicker_file = "randomPicker.json"
 
@@ -101,7 +101,7 @@ class RandomPicker(commands.Cog):
 			for choice in listChoice:
 				msg_content += f"{choice['name']} ({choice['weight']})\n"
 
-			embed = nextcord.Embed(color=nextcord.Color.blurple())
+			embed = discord.Embed(color=discord.Color.blurple())
 			embed.title = msg_header
 			embed.description = msg_content
 
@@ -279,7 +279,7 @@ class RandomPicker(commands.Cog):
 				# We format the message
 				msg_header = "Item Choose"
 
-				embed = nextcord.Embed(color=nextcord.Color.blurple())
+				embed = discord.Embed(color=discord.Color.blurple())
 				embed.title = msg_header
 				embed.description = itemChoose[0]
 
@@ -333,5 +333,5 @@ class RandomPicker(commands.Cog):
 
 		await ctx.send(msg)
 
-def setup(bot):
-	bot.add_cog(RandomPicker(bot))
+async def setup(bot):
+	await bot.add_cog(RandomPicker(bot))

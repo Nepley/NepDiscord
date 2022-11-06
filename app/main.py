@@ -1,5 +1,5 @@
-from nextcord.ext import commands
-import nextcord
+from discord.ext import commands
+import discord
 import requests
 import os
 import json
@@ -11,7 +11,8 @@ f = open("config.json", "r")
 config = json.load(f)
 f.close()
 
-intents = nextcord.Intents.default()  # Allow the use of custom intents
+intents = discord.Intents.default()  # Allow the use of custom intents
+intents.message_content = True
 intents.members = True
 
 bot = commands.Bot(command_prefix='Nep', help_command=None, intents=intents)
@@ -43,12 +44,12 @@ async def on_ready():
 		os.makedirs("guilds/", exist_ok=True)
 
 	# Loadings cogs
-	bot.load_extension('cogs.citations')
-	bot.load_extension('cogs.echo')
-	bot.load_extension('cogs.anniversary')
-	bot.load_extension('cogs.misc')
-	bot.load_extension('cogs.playlist')
-	bot.load_extension('cogs.randomPicker')
+	await bot.load_extension('cogs.citations')
+	await bot.load_extension('cogs.echo')
+	await bot.load_extension('cogs.anniversary')
+	await bot.load_extension('cogs.misc')
+	await bot.load_extension('cogs.playlist')
+	await bot.load_extension('cogs.randomPicker')
 
 	print("Main API called. All Cogs loaded. Discord Bot started.")
 
@@ -189,7 +190,7 @@ async def checkPlaylist():
 						for video in listNewVideo:
 							msg_content += f"[{video['title']}](https://www.youtube.com/watch?v={video['id']})\n"
 
-						embed = nextcord.Embed(color=nextcord.Color.green())
+						embed = discord.Embed(color=discord.Color.green())
 						embed.title = msg_header
 						embed.description = msg_content
 						
@@ -203,7 +204,7 @@ async def checkPlaylist():
 						for video in listDeletedVideo:
 							msg_content += f"[{video['title']}](https://www.youtube.com/watch?v={video['id']})\n"
 
-						embed = nextcord.Embed(color=nextcord.Color.red())
+						embed = discord.Embed(color=discord.Color.red())
 						embed.title = msg_header
 						embed.description = msg_content
 

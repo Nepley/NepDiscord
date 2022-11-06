@@ -1,7 +1,7 @@
 import os
 import json
-from nextcord.ext import commands
-import nextcord
+from discord.ext import commands
+import discord
 import requests
 import hashlib
 
@@ -128,7 +128,7 @@ class Citations(commands.Cog):
 
 				# Forming embed Message
 				col = StringToColor(quote["author"])
-				embed = nextcord.Embed(color=int(col, 16))
+				embed = discord.Embed(color=int(col, 16))
 				embed.description = quote["quote"]
 				embed.set_footer(text= quote["author"] + " ("+ quote["date"] +")")
 
@@ -171,7 +171,7 @@ class Citations(commands.Cog):
 				for key, value in stats["stats"].items():
 					msg_content += str(key) + " : **" + str(value) + "**\n"
 
-				embed = nextcord.Embed(color=nextcord.Color.blurple())
+				embed = discord.Embed(color=discord.Color.blurple())
 				embed.title = msg_header
 				embed.description = msg_content
 				embed.set_footer(text="Total : " + str(stats["Total"]))
@@ -198,5 +198,5 @@ class Citations(commands.Cog):
 		else:
 			print(error)
 
-def setup(bot):
-	bot.add_cog(Citations(bot))
+async def setup(bot):
+	await bot.add_cog(Citations(bot))
