@@ -4,7 +4,7 @@ Discord bot using [Nepgeardam](https://github.com/Nepley/Nepgeardam) + some othe
 
 # Requirements
 
-The bot is using [Nextcord](https://github.com/nextcord/nextcord) for the bot part and FastAPI for the Webservices
+The bot is using [discord.py](https://github.com/Rapptz/discord.py) for the bot part and FastAPI for the Webservices
 All library used are in the requirements.txt
 
 A Dockerfile is provided.
