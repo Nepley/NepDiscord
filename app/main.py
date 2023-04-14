@@ -5,7 +5,8 @@ import os
 import json
 import asyncio
 from fastapi import FastAPI
-from pytube import Playlist, YouTube
+from googleapiclient.discovery import build
+from googleapiclient.discovery_cache.base import Cache
 
 f = open("config.json", "r")
 config = json.load(f)
@@ -27,6 +28,7 @@ UniCry = "<:UniCry:679016707343515672>"
 ###
 
 urlAPI = config["urlAPI"]
+youtubeApiKey = config["youtubeApiKey"]
 
 ### Events
 
@@ -144,19 +146,24 @@ async def checkPlaylist():
 					for video in listVideo:
 						listVideoId.append(video['id'])
 
-					playlistToCheck = Playlist(playlist['url'])
-					
-					for video in playlistToCheck.videos:
-						listVideoPlaylist.append(video.video_id)
+					idPlaylist = playlist['url'].split('=')[1]
+					listVideoPlaylist = getListVideoFromPlaylist(idPlaylist)
 
+					listVideoIdPlaylist = []
 					for video in listVideoPlaylist:
+						videoId = video["id"]
+						videoTitle = video["snippet"]["title"]
+
+						# We add the video to the list id
+						listVideoIdPlaylist.append(videoId)
+
 						# We check if the video does not exist
-						if video not in listVideoId:
-							listNewVideo.append({'id': video, 'title': YouTube(f"https://www.youtube.com/watch?v={video}").title})
+						if videoId not in listVideoId:
+							listNewVideo.append({'id': videoId, 'title': videoTitle})
 
 					# We check if a video does not exist anymore
 					for video in listVideo:
-						if video['id'] not in listVideoPlaylist:
+						if video['id'] not in listVideoIdPlaylist:
 							listDeletedVideo.append(video)
 
 				# If we don't have the file, there is a problem, so we ignore it
@@ -221,5 +228,53 @@ async def run():
 		await bot.start(token)
 	except KeyboardInterrupt:
 		await bot.logout()
+
+## Helper Functions
+
+class MemoryCache(Cache):
+	_CACHE = {}
+
+	def get(self, url):
+		return MemoryCache._CACHE.get(url)
+
+	def set(self, url, content):
+		MemoryCache._CACHE[url] = content
+
+def getListVideoFromPlaylist(id):
+	youtube = build('youtube', 'v3', developerKey=youtubeApiKey, cache=MemoryCache())
+
+	finished = False
+	listVideo = []
+	pageToken = ""
+	maxAttempt = 10
+	attempt = 0
+	while not finished and attempt < maxAttempt:
+		if(pageToken != ""):
+			request = youtube.playlistItems().list(
+				part="snippet,contentDetails",
+				maxResults=50,
+				playlistId=id,
+				pageToken = response["nextPageToken"]
+			)
+		else:
+			request = youtube.playlistItems().list(
+				part="snippet,contentDetails",
+				maxResults=50,
+				playlistId=id
+			)
+
+		response = request.execute()
+
+		# We list every video of this page
+		listVideo = listVideo + response["items"]
+
+		# If there is no other page, we end the loop
+		if(not "nextPageToken" in response):
+			finished = True
+		else:
+			pageToken = response["nextPageToken"]
+			attempt += 1
+
+	return listVideo
 
 asyncio.create_task(run())

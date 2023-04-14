@@ -1,4 +1,5 @@
 {
     "urlAPI": "http://Nepgeardam:80/",
-    "token": "TOKEN_HERE"
+    "token": "TOKEN_HERE",
+    "youtubeApiKey": "GOOGLE_API_KEY"
 }
